@@ -1,25 +1,11 @@
 import React, { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate  } from 'react-router-dom';
-import { Button, Checkbox, Form, Input } from 'antd';
-
-// import Form from "react-validation/build/form";
-// import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
+import { Button, Form, Input, Layout, PageHeader, Content, Space } from 'antd';
 
 import { login } from "../actions/auth";
 
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-
-const Login = (props) => {
+export default function Login(props) {
   let navigate = useNavigate();
 
   const form = useRef();
@@ -27,7 +13,6 @@ const Login = (props) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const { isLoggedIn } = useSelector(state => state.auth);
   const { message } = useSelector(state => state.message);
@@ -47,7 +32,6 @@ const Login = (props) => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    setLoading(true);
 
     form.current.validateAll();
 
@@ -58,10 +42,9 @@ const Login = (props) => {
           window.location.reload();
         })
         .catch(() => {
-          setLoading(false);
         });
     } else {
-      setLoading(false);
+      console.log('hass error');
     }
   };
 
@@ -71,8 +54,8 @@ const Login = (props) => {
           navigate("/");
           window.location.reload();
         })
-        .catch(() => {
-          setLoading(false);
+        .catch((error) => {
+          console.error(error);
         });
   };
   const onFinishFailed = (errorInfo) => {
@@ -85,6 +68,7 @@ const Login = (props) => {
 
   return (
     <>
+      <h1 style={{textAlign: 'center'}}>Task List Application</h1>
       <Form
         name="basic"
         labelCol={{
@@ -143,5 +127,3 @@ const Login = (props) => {
     </>
   );
 };
-
-export default Login;

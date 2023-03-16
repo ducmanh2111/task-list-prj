@@ -1,5 +1,4 @@
-class ApplicationController < ActionController::Base
-  protect_from_forgery prepend: true
+class ApplicationController < ActionController::API
   include DeviseTokenAuth::Concerns::SetUserByToken
   include Pagy::Backend
   include PaginationHandler
