@@ -1,19 +1,28 @@
-import React from "react";
-import { useNavigate  } from 'react-router-dom';
-import { Button, Form, Input } from 'antd';
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate  } from 'react-router-dom';
+import { Button, Form, Input, message } from 'antd';
 
 import AuthService from "../services/auth.service";
 
 
 export default function Login() {
   let navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
 
+  useEffect(() => {
+    if (errors.length !== 0) {
+      console.log(errors)
+      message.error(errors);
+    }
+  }, [errors]);
 
   const onFinish = (values) => {
     const { email, password } = values;
 
     AuthService.login(email, password).then(data => {
       navigate("/tasks");
+    }).catch(error => {
+      setErrors(error.response.data.errors.full_messages);
     })
   };
 
@@ -75,10 +84,14 @@ export default function Login() {
                 offset: 8,
                 span: 16,
               }}
+              style={{textAlign: 'center'}}
             >
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" style={{width: '100%'}}>
                 Submit
               </Button>
+              <Link to='/register'>
+                I don't have an account
+              </Link>
             </Form.Item>
           </Form>
         </div>

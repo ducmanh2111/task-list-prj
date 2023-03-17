@@ -4,7 +4,15 @@ const register = (email, password) => {
   return api.post("/auth", {
     email,
     password
-  });
+  }).then(response => {
+    console.log(response)
+    const user_info = {
+      'access-token': response.headers.get('access-token'),
+      'client': response.headers.get('client'),
+      'uid': response.headers.get('uid')
+    }
+    localStorage.setItem('user_info', JSON.stringify(user_info));
+  });;
 };
 
 const login = (email, password) => {

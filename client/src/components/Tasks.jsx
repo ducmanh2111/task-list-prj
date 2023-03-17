@@ -8,20 +8,34 @@ import taskApi from '../api/tasks';
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
   useEffect(() => {
-    taskApi.loadTasks({}, (response) => {
-      setTasks(response.data)
-    });
+    try {
+      taskApi.loadTasks({}, (response) => {
+        setTasks(response.data)
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   const handleFormSubmit = (title) => {
-    taskApi.createTask(title, () => {
-      message.success('Task added!');
-    });
+    try {
+      taskApi.createTask(title, () => {
+        taskApi.loadTasks({}, (response) => {
+          setTasks(response.data);
+          message.success('Task added!');
+        });
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleRemoveTask = (task) => {
     taskApi.deleteTask(task, () => {
-      message.warn('Task removed!');
+      taskApi.loadTasks({}, (response) => {
+        setTasks(response.data);
+        message.success('Task removed!');
+      });
     });
   };
 
@@ -30,14 +44,11 @@ const Tasks = () => {
       message.info('Task state updated!');
     })
   };
-  console.log('abc')
-  return 'abc'
   return (
     <Row
       justify="center"
       align="middle"
       gutter={[0, 20]}
-      className="tasks-container"
     >
       <Col
         xs={{ span: 23 }}

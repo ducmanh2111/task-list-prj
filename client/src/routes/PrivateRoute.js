@@ -1,9 +1,11 @@
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
-export default function PrivateRoute({ children, ...rest }) {
+export default function PrivateRoute({ children }) {
   const user_info = localStorage.getItem('user_info');
-  return (
-    user_info ? <Outlet /> : <Navigate to='/login' />
-  )
+  if (!user_info) {
+    return <Navigate to='/login' replace />
+  }
+
+  return children;
 }

@@ -7,10 +7,11 @@ const axiosInstance = axios.create({
   timeout: 30000
 });
 
-const user_info = JSON.parse(localStorage.getItem('user_info'));
 
 axiosInstance.interceptors?.request.use(
   config => {
+    const user_info = JSON.parse(localStorage.getItem('user_info'));
+
     config.headers = {
       'Content-Type': 'application/json',
       ...config.headers,

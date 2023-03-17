@@ -3,7 +3,7 @@ class TasksController < ApplicationController
   before_action :task, only: %i[:show, :update, :destroy]
 
   def index
-    presenter = TasksPresenter.new(params)
+    presenter = TasksPresenter.new(params, current_user)
     render json: {
       data: TaskListSerializer.new(data: presenter.result.dig(:pagy_tasks)).generate,
       meta: pagy_info(presenter.result.dig(:tasks), presenter.result.dig(:pagy))
@@ -11,7 +11,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @form = TasksForm.new(task_params, User.first)
+    @form = TasksForm.new(task_params, current_user)
     if @form.save
       render json: { status: :ok }
     else
@@ -20,8 +20,8 @@ class TasksController < ApplicationController
   end
 
   def update
-    @form = TasksForm.new(task_params, User.first)
-    @form.record = @task
+    @form = TasksForm.new(task_params, current_user)
+    @form.record = task
     if @form.save
       render json: { status: :ok, message: "Success" }
     else
@@ -30,16 +30,15 @@ class TasksController < ApplicationController
   end
 
   def destroy
-    @form = TasksForm.new({}, User.first)
-    @form.record = @task
-    byebug
+    @form = TasksForm.new({}, current_user)
+    @form.record = task
     @form.destroy
   end
 
   private
 
   def task
-    @task = Task.find(params[:id])
+    @task ||= Task.find(params[:id])
   end
 
   def task_params

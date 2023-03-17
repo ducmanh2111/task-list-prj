@@ -30,13 +30,16 @@ const App = () => {
   return (
     <>
       <div className="container mt-3">
-        <Routes>abc
-          {/* <Route
-            element={<PrivateRoute/>}
-            path='/'
-          > */}
-            <Route to='/tasks' element={<Tasks/>} exact />
-          {/* </Route> */}
+        <Routes>
+          <Route
+            path='/tasks'
+            element={
+              <PrivateRoute>
+                <Tasks />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/" element={<Tasks />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

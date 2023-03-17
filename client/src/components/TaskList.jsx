@@ -23,7 +23,7 @@ const TaskList = ({
     )}
     pagination={{
       position: 'bottom',
-      pageSize: 10,
+      pageSize: 5,
     }}
   />
 );

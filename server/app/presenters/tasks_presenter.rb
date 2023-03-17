@@ -1,9 +1,10 @@
 class TasksPresenter
   include Pagy::Backend
 
-  attr_reader :params, :per_page, :page
+  attr_reader :params, :per_page, :page, :user
 
-  def initialize(params)
+  def initialize(params, user)
+    @user = user
     @params = params
     @per_page = params[:per_page] || 5
     @page = params[:page] || 1
@@ -21,6 +22,6 @@ class TasksPresenter
   private
 
   def tasks
-    Task.order(id: :desc).includes(:user)
+    user.tasks.order(id: :desc).includes(:user)
   end
 end

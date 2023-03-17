@@ -1,125 +1,100 @@
-import React, { useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Form, Input, message } from "antd";
+import React, { useEffect, useState } from "react";
+import AuthService from "../services/auth.service";
+import { Link, useNavigate } from "react-router-dom";
 
-import Form from "react-validation/build/form";
-import Input from "react-validation/build/input";
-import CheckButton from "react-validation/build/button";
-import { isEmail } from "validator";
-
-const required = (value) => {
-  if (!value) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
-      </div>
-    );
-  }
-};
-
-const validEmail = (value) => {
-  if (!isEmail(value)) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        This is not a valid email.
-      </div>
-    );
-  }
-};
-
-const vpassword = (value) => {
-  if (value.length < 6 || value.length > 40) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        The password must be between 6 and 40 characters.
-      </div>
-    );
-  }
-};
 
 const Register = () => {
-  const form = useRef();
-  const checkBtn = useRef();
+  const navigate = useNavigate();
+  const [errors, setErrors] = useState([]);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [successful, setSuccessful] = useState(false);
+  useEffect(() => {
+    if (errors.length !== 0) {
+      message.error(errors);
+    }
+  }, [errors]);
 
-  const { message } = useSelector(state => state.message);
-  const dispatch = useDispatch();
+  const onFinish = (values) => {
+    const { email, password } = values;
 
-  const onChangeEmail = (e) => {
-    const email = e.target.value;
-    setEmail(email);
+    AuthService.register(email, password).then(data => {
+      navigate("/tasks");
+    }).catch(error => {
+      setErrors(error.response.data.errors.full_messages);
+    });
   };
 
-  const onChangePassword = (e) => {
-    const password = e.target.value;
-    setPassword(password);
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
   };
-
-  const handleRegister = (e) => {
-    e.preventDefault();
-
-    setSuccessful(false);
-
-    form.current.validateAll();
-
-    if (checkBtn.current.context._errors.length === 0) {}
-  };
-
+  
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
+    <>
+      <div style={{display: 'flex', alignItems: 'center', height: '100vh', justifyContent: 'center'}}>
+        <div>
+          <h1 style={{textAlign: 'center'}}>Task List Application</h1>
+          <Form
+            name="basic"
+            labelCol={{
+              span: 8,
+            }}
+            wrapperCol={{
+              span: 16,
+            }}
+            style={{
+              maxWidth: 600,
+            }}
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your email!',
+                },
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-        <Form onSubmit={handleRegister} ref={form}>
-          {!successful && (
-            <div>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="email"
-                  value={email}
-                  onChange={onChangeEmail}
-                  validations={[required, validEmail]}
-                />
-              </div>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!',
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
 
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <Input
-                  type="password"
-                  className="form-control"
-                  name="password"
-                  value={password}
-                  onChange={onChangePassword}
-                  validations={[required, vpassword]}
-                />
-              </div>
-
-              <div className="form-group">
-                <button className="btn btn-primary btn-block">Sign Up</button>
-              </div>
-            </div>
-          )}
-
-          {message && (
-            <div className="form-group">
-              <div className={ successful ? "alert alert-success" : "alert alert-danger" } role="alert">
-                {message}
-              </div>
-            </div>
-          )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
-        </Form>
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
+              style={{textAlign: 'center'}}
+            >
+              <Button type="primary" htmlType="submit" style={{width: '100%'}}>
+                Signup
+              </Button>
+              <Link to='/login'>
+                I already have an account
+              </Link>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
