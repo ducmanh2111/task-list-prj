@@ -11,7 +11,6 @@ export default function Login() {
 
   useEffect(() => {
     if (errors.length !== 0) {
-      console.log(errors)
       message.error(errors);
     }
   }, [errors]);
@@ -22,7 +21,7 @@ export default function Login() {
     AuthService.login(email, password).then(data => {
       navigate("/tasks");
     }).catch(error => {
-      setErrors(error.response.data.errors.full_messages);
+      setErrors(error.response.data.errors);
     })
   };
 

@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import AuthService from "../services/auth.service";
 import { Link, useNavigate } from "react-router-dom";
 
-
 const Register = () => {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     if (errors.length !== 0) {
-      message.error(errors);
+      message.error(errors.join('. '));
     }
   }, [errors]);
 

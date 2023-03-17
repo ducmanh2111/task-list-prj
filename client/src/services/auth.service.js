@@ -32,7 +32,7 @@ const login = (email, password) => {
     });
 };
 
-const logout = () => {
+const logout = async () => {
   localStorage.removeItem('user_info');
 };
 

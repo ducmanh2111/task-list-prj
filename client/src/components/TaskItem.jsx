@@ -7,6 +7,7 @@ const TaskItem = ({
   onTaskRemoval,
   onTaskToggle,
 }) => {
+  console.log(task)
   return (
     <List.Item
       actions={[
