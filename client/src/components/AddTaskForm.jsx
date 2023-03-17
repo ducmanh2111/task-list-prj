@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Row, Col, Button, Input } from 'antd';
 import { PlusCircleFilled } from '@ant-design/icons';
 
-const AddTaskForm= ({ onFormSubmit }) => {
+export default function AddTaskForm({ onFormSubmit }) {
   const [form] = Form.useForm();
 
   const onFinish = () => {
@@ -38,5 +38,3 @@ const AddTaskForm= ({ onFormSubmit }) => {
     </Form>
   );
 };
-
-export default AddTaskForm;

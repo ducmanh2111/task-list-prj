@@ -1,4 +1,4 @@
-import api from "../utils/api-client";
+import api from "../utils/api";
 
 const register = (email, password) => {
   return api.post("/auth", {
@@ -13,17 +13,19 @@ const login = (email, password) => {
       email,
       password,
     })
-    .then((response) => {
-      if (response.data.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response.data));
+    .then(response => {
+      console.log(response)
+      const user_info = {
+        'access-token': response.headers.get('access-token'),
+        'client': response.headers.get('client'),
+        'uid': response.headers.get('uid')
       }
-
-      return response.data;
+      localStorage.setItem('user_info', JSON.stringify(user_info));
     });
 };
 
 const logout = () => {
-  localStorage.removeItem("user");
+  localStorage.removeItem('user_info');
 };
 
 const auth = {

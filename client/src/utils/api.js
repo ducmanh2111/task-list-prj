@@ -1,13 +1,22 @@
-import axiosInstance from "./api-client"
+import axios from "axios";
+
+const API_URL = "http://localhost:3000";
+
+const axiosInstance = axios.create({
+  baseURL: API_URL,
+  timeout: 30000
+});
+
+const user_info = JSON.parse(localStorage.getItem('user_info'));
 
 axiosInstance.interceptors?.request.use(
   config => {
     config.headers = {
       'Content-Type': 'application/json',
       ...config.headers,
-      'access-token': attributes['access-token'],
-      client: attributes.client,
-      uid: attributes.uid
+      'access-token': user_info?.['access-token'],
+      client: user_info?.['client'],
+      uid: user_info?.['uid']
     };
 
     return config;

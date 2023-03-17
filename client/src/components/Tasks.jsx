@@ -7,35 +7,31 @@ import taskApi from '../api/tasks';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState([]);
-  const [toggleReload, setToggleReload] = useState(false);
-
   useEffect(() => {
     taskApi.loadTasks({}, (response) => {
       setTasks(response.data)
     });
-  }, [toggleReload]);
+  }, []);
 
   const handleFormSubmit = (title) => {
     taskApi.createTask(title, () => {
       message.success('Task added!');
-      setToggleReload(!toggleReload);
     });
   };
 
   const handleRemoveTask = (task) => {
     taskApi.deleteTask(task, () => {
       message.warn('Task removed!');
-      setToggleReload(!toggleReload);
     });
   };
 
   const handleToggleTaskStatus = (task) => {
     taskApi.updateTask({...task, status: task.status === 'open' ? 'completed' : 'open'}, () => {
       message.info('Task state updated!');
-      setToggleReload(!toggleReload);
     })
   };
-
+  console.log('abc')
+  return 'abc'
   return (
     <Row
       justify="center"

@@ -1,4 +1,4 @@
-import axios from '../utils/api-client';
+import axios from '../utils/api';
 
 const tasks = {
   loadTasks(params, cb) {

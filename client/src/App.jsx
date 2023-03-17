@@ -1,44 +1,42 @@
-import React, { useEffect, useCallback } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
-import { Menu, MailOutlined } from 'antd';
-import { useState } from 'react';
+import React, { useEffect } from "react";
+import { Routes, Route, useNavigate, useLocation, redirect } from "react-router-dom";
 
 import "./App.css";
 
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Tasks from "./components/Tasks";
-import { logout } from "./actions/auth";
-import { clearMessage } from "./actions/message";
+import PrivateRoute from "./routes/PrivateRoute";
+import AuthService from "./services/auth.service";
 
 const App = () => {
-  const [current, setCurrent] = useState('mail');
-  const { user: currentUser } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isLoggedIn = localStorage.getItem('user_info');
+
   
-  const onClick = (e) => {
-    console.log('click ', e);
-    setCurrent(e.key);
-  };
-  let location = useLocation();
-
   useEffect(() => {
-    if (["/login", "/register"].includes(location.pathname)) {
-      dispatch(clearMessage()); // clear message when changing location
+    if (!isLoggedIn && !['/login', '/register'].includes(location.pathname)) {
+      navigate("/login");
     }
-  }, [dispatch, location]);
+  }, [location])
 
-  const logOut = useCallback(() => {
-    dispatch(logout());
-  }, [dispatch]);
-
+  const signOut = () => {
+    AuthService.logout();
+    redirect('/login');
+  }
+  
   return (
     <>
       <div className="container mt-3">
-        <Routes>
-          <Route path="/" element={<Tasks />} />
-          <Route path="/tasks" element={<Tasks />} />
+        <Routes>abc
+          {/* <Route
+            element={<PrivateRoute/>}
+            path='/'
+          > */}
+            <Route to='/tasks' element={<Tasks/>} exact />
+          {/* </Route> */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>

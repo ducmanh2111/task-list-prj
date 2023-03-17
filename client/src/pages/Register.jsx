@@ -6,8 +6,6 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import { isEmail } from "validator";
 
-import { register } from "../actions/auth";
-
 const required = (value) => {
   if (!value) {
     return (
@@ -66,15 +64,7 @@ const Register = () => {
 
     form.current.validateAll();
 
-    if (checkBtn.current.context._errors.length === 0) {
-      dispatch(register(email, password))
-        .then(() => {
-          setSuccessful(true);
-        })
-        .catch(() => {
-          setSuccessful(false);
-        });
-    }
+    if (checkBtn.current.context._errors.length === 0) {}
   };
 
   return (

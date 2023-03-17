@@ -4,15 +4,10 @@ class TasksController < ApplicationController
 
   def index
     presenter = TasksPresenter.new(params)
-    respond_to do |format|
-      format.html
-      format.json do
-        render json: {
-          data: TaskListSerializer.new(data: presenter.result.dig(:pagy_tasks)).generate,
-          meta: pagy_info(presenter.result.dig(:tasks), presenter.result.dig(:pagy))
-        }
-      end
-    end
+    render json: {
+      data: TaskListSerializer.new(data: presenter.result.dig(:pagy_tasks)).generate,
+      meta: pagy_info(presenter.result.dig(:tasks), presenter.result.dig(:pagy))
+    }
   end
 
   def create
