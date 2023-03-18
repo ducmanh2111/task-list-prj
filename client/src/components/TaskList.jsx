@@ -6,9 +6,11 @@ import TaskItem from './TaskItem';
 
 const TaskList = ({
   tasks,
+  tasksMetaData,
   onTaskRemoval,
   onTaskToggle,
-  onChangeTaskDueDate
+  onChangeTaskDueDate,
+  onChangePageNumber
 }) => (
   <List
     locale={{
@@ -26,6 +28,9 @@ const TaskList = ({
     pagination={{
       position: 'bottom',
       pageSize: 5,
+      current: tasksMetaData.page,
+      total: tasksMetaData.total_result,
+      onChange: (page, pageSize) => onChangePageNumber(page, pageSize)
     }}
   />
 );

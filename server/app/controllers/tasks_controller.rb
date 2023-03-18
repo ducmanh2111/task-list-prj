@@ -6,9 +6,10 @@ class TasksController < ApplicationController
 
   def index
     presenter = TasksPresenter.new(params, current_user)
+    searched_results = presenter.result
     render json: {
-      data: TaskListSerializer.new(data: presenter.result[:pagy_tasks]).generate,
-      meta: pagy_info(presenter.result[:tasks], presenter.result[:pagy])
+      data: TaskListSerializer.new(data: searched_results[:pagy_tasks]).generate,
+      meta: pagy_info(searched_results[:tasks], searched_results[:pagy])
     }
   end
 

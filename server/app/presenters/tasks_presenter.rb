@@ -8,22 +8,21 @@ class TasksPresenter
   def initialize(params, user)
     @user = user
     @params = params
-    @per_page = params[:per_page] || 10
+    @per_page = params[:per_page] || 5
     @page = params[:page] || 1
   end
 
   def result
-    pagy, pagy_tasks = pagy(tasks, items: per_page, page: page)
+    return @result if @result
+
+    q_params = params[:q].presence || ActionController::Parameters.new
+    @q = SearchTasksForm.new(q_params.merge(user_id: user.id).permit!).build_params
+    @result ||= Task.ransack(@q).result.order(due_date: :asc)
+    pagy, pagy_tasks = pagy(@result, items: per_page, page: page)
     {
       pagy_tasks: pagy_tasks,
-      tasks: tasks,
+      tasks: @result,
       pagy: pagy
     }
-  end
-
-  private
-
-  def tasks
-    user.tasks.order(due_date: :asc)
   end
 end
