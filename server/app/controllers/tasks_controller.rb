@@ -29,6 +29,10 @@ class TasksController < ApplicationController
     end
   end
 
+  def show
+    render json: { status: :ok, data: task }
+  end
+
   def destroy
     @form = TasksForm.new({}, current_user)
     @form.record = task

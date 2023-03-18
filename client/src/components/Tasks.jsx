@@ -7,49 +7,53 @@ import { message } from 'antd';
 import taskApi from '../api/tasks';
 import AuthService from '../services/auth.service';
 
-const Tasks = () => {
+export default function Tasks() {
   const [tasks, setTasks] = useState([]);
+  const [isReload, setIsReload] = useState(false);
 
   useEffect(() => {
-    try {
-      taskApi.loadTasks({}, (response) => {
-        setTasks(response.data)
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+    taskApi.loadTasks().then(response => {
+      setTasks(response.data.data);
+    }).catch(error => {
+      console.error(error.message);
+    });
+  }, [isReload]);
 
   const handleFormSubmit = (title) => {
-    try {
-      taskApi.createTask(title, () => {
-        taskApi.loadTasks({}, (response) => {
-          setTasks(response.data);
-          message.success('Task added!');
-        });
-      });
-    } catch (error) {
-      console.error(error);
-    }
+    taskApi.createTask(title).then(_response => {
+      setIsReload(!isReload);
+      message.success('Task added!');
+    }).catch(error => {
+      message.error(error.message);
+    });
   };
 
   const handleRemoveTask = (task) => {
-    taskApi.deleteTask(task, () => {
-      taskApi.loadTasks({}, (response) => {
-        setTasks(response.data);
-        message.success('Task removed!');
-      });
+    taskApi.deleteTask(task).then(_response => {
+      setIsReload(!isReload);
+      message.success('Task removed!');
+    }).catch(error => {
+      message.error(error.message);
     });
   };
 
   const handleToggleTaskStatus = (task) => {
-    taskApi.updateTask({...task, status: task.status === 'open' ? 'completed' : 'open'}, () => {
-      taskApi.loadTasks({}, (response) => {
-        setTasks(response.data);
-        message.success('Task state updated!');
-      });
-    })
+    taskApi.updateTask({...task, status: task.status === 'open' ? 'completed' : 'open'}).then(_res => {
+      setIsReload(!isReload);
+      message.success('Task state updated!');
+    }).catch(error => {
+      message.error(error.message);
+    });
   };
+
+  const onChangeTaskDueDate = (task, date) => {
+    taskApi.updateTask({...task, due_date: date}).then(_res => {
+      setIsReload(!isReload);
+      message.success('Task Due Date updated!');
+    }).catch(error => {
+      message.error(error.message);
+    })
+  }
 
   const handleClickLogout = () => {
     AuthService.logout().then(() => {
@@ -112,6 +116,7 @@ const Tasks = () => {
               tasks={tasks}
               onTaskRemoval={handleRemoveTask}
               onTaskToggle={handleToggleTaskStatus}
+              onChangeTaskDueDate={onChangeTaskDueDate}
             />
           </Card>
         </Col>
@@ -119,5 +124,3 @@ const Tasks = () => {
     </>
   );
 };
-
-export default Tasks;

@@ -8,6 +8,7 @@ const TaskList = ({
   tasks,
   onTaskRemoval,
   onTaskToggle,
+  onChangeTaskDueDate
 }) => (
   <List
     locale={{
@@ -19,6 +20,7 @@ const TaskList = ({
         task={task}
         onTaskToggle={onTaskToggle}
         onTaskRemoval={onTaskRemoval}
+        onChangeTaskDueDate={onChangeTaskDueDate}
       />
     )}
     pagination={{

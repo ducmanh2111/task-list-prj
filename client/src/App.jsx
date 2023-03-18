@@ -5,8 +5,9 @@ import "./App.css";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Tasks from "./components/Tasks";
 import PrivateRoute from "./routes/PrivateRoute";
+import Tasks from "./components/Tasks";
+import TaskDetail from "./components/TaskDetail";
 
 const App = () => {
   const navigate = useNavigate();
@@ -29,6 +30,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Tasks />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/tasks/:taskId'
+            element={
+              <PrivateRoute>
+                <TaskDetail />
               </PrivateRoute>
             }
           />

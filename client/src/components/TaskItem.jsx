@@ -1,13 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Tooltip, Tag, List, Button, Popconfirm, Switch, DatePicker, Space } from 'antd';
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { disabledDate } from '../utils/time';
 
 const TaskItem = ({
   task,
   onTaskRemoval,
   onTaskToggle,
+  onChangeTaskDueDate
 }) => {
-  console.log(task)
+
   return (
     <List.Item
       actions={[
@@ -16,9 +20,9 @@ const TaskItem = ({
             title={'Due Date'}
           >
             <DatePicker
-              onChange={(date, dateSring) => {
-                console.log(date, dateSring)
-              }}
+              disabledDate={disabledDate}
+              defaultValue={task.due_date ? moment(task.due_date) : null}
+              onChange={(date, dateString) => onChangeTaskDueDate(task, dateString)}
             />
           </Tooltip>
         </Space>,
@@ -47,8 +51,14 @@ const TaskItem = ({
       key={task.id}
     >
       <div className="task-item">
-        <Tag color={task.status === 'completed' ? 'cyan' : 'red'} className="task-tag">
-          {task.title}
+        <Tag color={task.status === 'completed' ? 'cyan' : 'red'}>
+          <Link
+            to={{
+              pathname: `${task.id}`,
+            }}
+          >
+            {task.title}
+          </Link>
         </Tag>
       </div>
     </List.Item>
