@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TaskListSerializer
   attr_reader :data
 

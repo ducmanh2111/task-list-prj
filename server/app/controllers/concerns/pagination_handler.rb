@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PaginationHandler
   def pagy_info(data, pagy)
     {

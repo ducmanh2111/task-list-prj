@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TasksPresenter
   include Pagy::Backend
 
@@ -6,7 +8,7 @@ class TasksPresenter
   def initialize(params, user)
     @user = user
     @params = params
-    @per_page = params[:per_page] || 5
+    @per_page = params[:per_page] || 10
     @page = params[:page] || 1
   end
 
@@ -22,6 +24,6 @@ class TasksPresenter
   private
 
   def tasks
-    user.tasks.order(id: :desc).includes(:user)
+    user.tasks.order(due_date: :asc)
   end
 end

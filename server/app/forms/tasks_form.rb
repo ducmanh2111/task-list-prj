@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TasksForm < BaseForm
   attribute :title, :string
   attribute :description, :string
@@ -15,15 +17,13 @@ class TasksForm < BaseForm
 
   def save
     return false unless valid?
-    
+
     task.update!(attributes)
 
     true
   end
 
-  def destroy
-    task.destroy
-  end
+  delegate :destroy, to: :task
 
   def task
     @task ||= record || @current_user.tasks.build

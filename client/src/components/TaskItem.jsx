@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Tooltip, Tag, List, Button, Popconfirm, Switch, DatePicker, Space } from 'antd';
-import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
+import { CloseOutlined, CheckOutlined, FlagFilled } from '@ant-design/icons';
 import moment from 'moment';
 import { disabledDate } from '../utils/time';
 
@@ -11,10 +11,17 @@ const TaskItem = ({
   onTaskToggle,
   onChangeTaskDueDate
 }) => {
+  const currentTime = moment();
+  const dueDate = moment(task.due_date || null);
+
+  const isOverDueTaskAndNotComplete = currentTime.isAfter(dueDate) && task.status !== 'completed';
 
   return (
     <List.Item
       actions={[
+        <FlagFilled
+          style={{color: isOverDueTaskAndNotComplete ? 'red' : 'transparent', fontSize: '1.5em', marginRight: '3px' }}
+        />,
         <Space direction="vertical">
           <Tooltip
             title={'Due Date'}
@@ -22,7 +29,7 @@ const TaskItem = ({
             <DatePicker
               disabledDate={disabledDate}
               defaultValue={task.due_date ? moment(task.due_date) : null}
-              onChange={(date, dateString) => onChangeTaskDueDate(task, dateString)}
+              onChange={(_date, dateString) => onChangeTaskDueDate(task, dateString)}
             />
           </Tooltip>
         </Space>,

@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 class TasksController < ApplicationController
   before_action :authenticate_user!
-  before_action :task, only: %i[:show, :update, :destroy]
+  before_action :task, only: %i[show update destroy]
 
   def index
     presenter = TasksPresenter.new(params, current_user)
     render json: {
-      data: TaskListSerializer.new(data: presenter.result.dig(:pagy_tasks)).generate,
-      meta: pagy_info(presenter.result.dig(:tasks), presenter.result.dig(:pagy))
+      data: TaskListSerializer.new(data: presenter.result[:pagy_tasks]).generate,
+      meta: pagy_info(presenter.result[:tasks], presenter.result[:pagy])
     }
   end
 
@@ -23,7 +25,7 @@ class TasksController < ApplicationController
     @form = TasksForm.new(task_params, current_user)
     @form.record = task
     if @form.save
-      render json: { status: :ok, message: "Success" }
+      render json: { status: :ok, message: 'Success' }
     else
       render json: { status: :unprocessable_entity, errors: @form.errors }
     end
