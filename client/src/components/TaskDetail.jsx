@@ -1,8 +1,8 @@
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, DatePicker, Form, Input, message, Switch } from 'antd';
+import { Button, Col, DatePicker, Form, Input, message, Row, Switch } from 'antd';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import taskApi from '../api/tasks';
 import { disabledDate } from '../utils/time';
 
@@ -54,98 +54,84 @@ export default function TaskDetail() {
   
   return (
     <>
-      { Object.keys(task).length !== 0 &&
-        <Form
-        form={form}
-        onFinish={onFinish}
-        layout="horizontal"
-        initialValues={initialValues}
-        >
-          <Form.Item
-            label={'Title'}
-            name={'title'}
-            rules={[{ required: true, message: 'This field is required' }]}
+      <Row justify="center" align="middle" style={{ height: '100vh' }}>
+        <Col xs={20} sm={16} md={12} lg={8}>
+          { Object.keys(task).length !== 0 &&
+            <Form
+            form={form}
+            onFinish={onFinish}
+            layout="horizontal"
+            size={"large"}
+            initialValues={initialValues}
             labelCol={{
-              span: 4
-            }}
-            wrapperCol={{
               span: 5
             }}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label={'Description'}
-            name={'description'}
-            labelCol={{
-              span: 4
-            }}
-            wrapperCol={{
-              span: 5
-            }}
-          >
-            <Input.TextArea showCount maxLength={100}/>
-          </Form.Item>
-          <Form.Item
-            label={'Completed'}
-            name={'status'}
-            labelCol={{
-              span: 4
-            }}
-            wrapperCol={{
-              span: 5
-            }}
-            valuePropName="checked"
-          >
-            <Switch
-              checkedChildren={<CheckOutlined />}
-              unCheckedChildren={<CloseOutlined />}
-              // onChange={() => onTaskToggle(task)}
-            />
-          </Form.Item>
-          <Form.Item
-            name='due_date'
-            label='Due Date'
-            labelCol={{
-              span: 4
-            }}
-            wrapperCol={{
-              span: 5
-            }}
-          >
-            <DatePicker
-              format="YYYY-MM-DD HH:mm:ss"
-              disabledDate={disabledDate}
-              showTime={{
-                defaultValue: moment('00:00:00', 'HH:mm:ss'),
-              }}
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item
-            name='created_at'
-            label='Created Date'
-            labelCol={{
-              span: 4
-            }}
-            wrapperCol={{
-              span: 5
-            }}
-          >
-            <Input readOnly />
-          </Form.Item>
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
-            }}
-          >
-            <Button type="primary" htmlType="submit">
-              Save
-            </Button>
-          </Form.Item>
-        </Form>
-      }
+            >
+              <Form.Item
+                label={'Title'}
+                name={'title'}
+                rules={[{ required: true, message: 'This field is required' }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label={'Description'}
+                name={'description'}
+              >
+                <Input.TextArea showCount maxLength={100}/>
+              </Form.Item>
+              <Form.Item
+                label={'Completed'}
+                name={'status'}
+                valuePropName="checked"
+              >
+                <Switch
+                  checkedChildren={<CheckOutlined />}
+                  unCheckedChildren={<CloseOutlined />}
+                  // onChange={() => onTaskToggle(task)}
+                />
+              </Form.Item>
+              <Form.Item
+                name='due_date'
+                label='Due Date'
+              >
+                <DatePicker
+                  format="YYYY-MM-DD HH:mm:ss"
+                  disabledDate={disabledDate}
+                  showTime={{
+                    defaultValue: moment('00:00:00', 'HH:mm:ss'),
+                  }}
+                  allowClear
+                />
+              </Form.Item>
+              <Form.Item
+                name='created_at'
+                label='Created Date'
+              >
+                <Input readOnly />
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button type="primary" htmlType="submit"> Save </Button>
+              </Form.Item>
+              <Form.Item
+                wrapperCol={{
+                  offset: 8,
+                  span: 16,
+                }}
+              >
+                <Button size={'large'} type='dashed'>
+                  <Link to='/tasks'>Back</Link>
+                </Button>
+              </Form.Item>
+            </Form>
+          }
+        </Col>
+      </Row>
     </>
   );
 };

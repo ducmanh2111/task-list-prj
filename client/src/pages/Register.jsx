@@ -1,7 +1,10 @@
 import { Button, Form, Input, message } from "antd";
 import React, { useEffect, useState } from "react";
-import AuthService from "../services/auth.service";
 import { Link, useNavigate } from "react-router-dom";
+
+import AuthService from "../services/auth.service";
+
+import './style.css';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -31,7 +34,7 @@ const Register = () => {
     <>
       <div style={{display: 'flex', alignItems: 'center', height: '100vh', justifyContent: 'center'}}>
         <div>
-          <h1 style={{textAlign: 'center'}}>Task List Application</h1>
+          <h1 className={'elegant-text'} style={{textAlign: 'center'}}>Task Management</h1>
           <Form
             name="basic"
             labelCol={{
@@ -49,6 +52,7 @@ const Register = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            size={'large'}
           >
             <Form.Item
               label="Email"

@@ -4,6 +4,8 @@ import { Button, Form, Input, message } from 'antd';
 
 import AuthService from "../services/auth.service";
 
+import './style.css';
+
 
 export default function Login() {
   let navigate = useNavigate();
@@ -33,7 +35,7 @@ export default function Login() {
     <>
       <div style={{display: 'flex', alignItems: 'center', height: '100vh', justifyContent: 'center'}}>
         <div>
-          <h1 style={{textAlign: 'center'}}>Task List Application</h1>
+          <h1 className={'elegant-text'} style={{textAlign: 'center'}}>Task Management</h1>
           <Form
             name="basic"
             labelCol={{
@@ -51,6 +53,7 @@ export default function Login() {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
+            size={'large'}
           >
             <Form.Item
               label="Email"
