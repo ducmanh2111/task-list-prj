@@ -12,13 +12,13 @@ import { createQueryString } from '../utils/query';
 
 export default function Tasks() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const page = searchParams.get('page') || 1;
-
+  
   const [tasks, setTasks] = useState([]);
   const [tasksMetaData, setTasksMetaData] = useState({});
   const [isReload, setIsReload] = useState(false);
-
+  
   useEffect(() => {
+    const page = searchParams.get('page') || 1;
     taskApi.loadTasks({ page: page }).then(response => {
       setTasks(response.data.data);
       setTasksMetaData(response.data.meta);
@@ -71,9 +71,10 @@ export default function Tasks() {
 
   const onChangePageNumber = (page, pageSize) => {
     const q = new URLSearchParams(searchParams.get('q'));
-    const queryParams = createQueryString({ page: page, q: { due_date: q.get('due_date') } });
-    setSearchParams(queryParams);
-    taskApi.loadTasks({ page: page, per_page: pageSize, q: { due_date: q.get('due_date') } })
+    const query = q.get('due_date') ? { page: page, q: { due_date: q.get('due_date') } } : { page: page };
+    const queryStringParams = createQueryString(query);
+    setSearchParams(queryStringParams);
+    taskApi.loadTasks({ page: page, per_page: pageSize, q: { due_date: q.get('due_date') ? q.get('due_date') : undefined} })
       .then(response => {
         setTasks(response.data.data);
         setTasksMetaData(response.data.meta);
