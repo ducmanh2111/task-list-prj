@@ -61,7 +61,7 @@ const TaskItem = ({
         <Tag color={task.status === 'completed' ? 'cyan' : 'red'}>
           <Link
             to={{
-              pathname: `${task.id}`,
+              pathname: `/tasks/${task.id}`,
             }}
           >
             {task.title}
